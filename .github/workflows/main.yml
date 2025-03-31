@@ -1,0 +1,48 @@
+name: Car Marketplace CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install Backend Dependencies
+      run: npm ci
+    
+    - name: Install Frontend Dependencies
+      working-directory: ./client
+      run: npm ci
+    
+    - name: Build Frontend
+      working-directory: ./client
+      run: npm run build
+    
+    - name: Run Backend Tests
+      run: npm test
+      env:
+        CI: true
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    
+    - name: Run Frontend Tests
+      working-directory: ./client
+      run: npm test
+      env:
+        CI: true 
