@@ -59,7 +59,7 @@ const Navbar = () => {
           }}
         >
           <DirectionsCar sx={{ mr: 1 }} />
-          Car Marketplace
+          Home
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -72,7 +72,25 @@ const Navbar = () => {
             Browse Vehicles
           </Button>
 
-          {user ? (
+          {!user ? (
+            <>
+              <Button
+                color="inherit"
+                component={RouterLink}
+                to="/login"
+                sx={{ mr: 2 }}
+              >
+                Login
+              </Button>
+              <Button
+                color="inherit"
+                component={RouterLink}
+                to="/register"
+              >
+                Register
+              </Button>
+            </>
+          ) : (
             <>
               {user.role === 'dealer' && (
                 <Button
@@ -118,25 +136,6 @@ const Navbar = () => {
                 )}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
-            </>
-          ) : (
-            <>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/login"
-                sx={{ mr: 1 }}
-              >
-                Login
-              </Button>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/register"
-                variant="outlined"
-              >
-                Register
-              </Button>
             </>
           )}
         </Box>
